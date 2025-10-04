@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Geist:wght@800&family=Oswald:wght@200..700&display=swap');
+
+body {
+  background-color: #000000;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding-top: 32px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.logo {
+  height: 240px; /* Adjust size as needed */
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 240px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 2.1rem;
+  transition: color 0.2s;
+}
+
+.menu li a:hover {
+  color: #a72222;
+}
+
+.menu-text {
+  font-family: "Oswald", sans-serif;
+}
