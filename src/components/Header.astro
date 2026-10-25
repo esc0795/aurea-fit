@@ -1,0 +1,423 @@
+---
+// src/components/Header.astro
+---
+
+<header class="site-header">
+  <!-- Main Navigation Bar with Pure White Background -->
+  <div class="nav-wrapper">
+    <div class="container nav-container">
+      
+      <!-- Brand Logo (Slightly increased size for maximum legibility) -->
+      <a href={import.meta.env.BASE_URL} class="brand-link" aria-label="Aurea Fit - Inicio">
+        <img 
+          src={`${import.meta.env.BASE_URL}logo.png`} 
+          alt="Aurea Fitness Wear" 
+          class="brand-logo" 
+        />
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <ul class="nav-links">
+          <li><a href={import.meta.env.BASE_URL} class="nav-link active">INICIO</a></li>
+          <li><a href="#categorias" class="nav-link">LEGGINGS</a></li>
+          <li><a href="#categorias" class="nav-link">TOPS & BRAS</a></li>
+          <li><a href="#categorias" class="nav-link">SHORTS</a></li>
+          <li><a href="#categorias" class="nav-link">ACCESORIOS</a></li>
+          <li><a href="#beneficios" class="nav-link">CALIDAD SEAMLESS</a></li>
+        </ul>
+      </nav>
+
+      <!-- Action Items & Sober Dark Green WhatsApp Button -->
+      <div class="nav-actions">
+        <!-- WhatsApp Button -->
+        <a 
+          href="https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20vengo%20desde%20la%20página%20web%20y%20deseo%20más%20información." 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-header-whatsapp"
+          title="Contactar por WhatsApp"
+        >
+          <svg class="icon-whatsapp-brand" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.182-.077.357.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.679.116-.174.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.203.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.966-1.393A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+          </svg>
+          <span class="btn-wa-text">Whatsapp</span>
+        </a>
+
+        <!-- Shopping Cart Icon -->
+        <a href="#categorias" class="btn-cart-minimal" aria-label="Bolsa de compras" title="Bolsa de compras">
+          <svg class="icon-cart" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-count">0</span>
+        </a>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button id="mobile-toggle" class="btn-menu-toggle" aria-label="Menú principal" aria-expanded="false">
+          <span class="bar bar-1"></span>
+          <span class="bar bar-2"></span>
+          <span class="bar bar-3"></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Navigation -->
+  <div id="mobile-drawer" class="mobile-drawer">
+    <div class="container mobile-drawer-inner">
+      <ul class="mobile-nav-links">
+        <li><a href={import.meta.env.BASE_URL} class="mobile-nav-item">INICIO</a></li>
+        <li><a href="#categorias" class="mobile-nav-item">SEAMLESS CONTOUR LEGGINGS</a></li>
+        <li><a href="#categorias" class="mobile-nav-item">SPORTS BRAS & TOPS</a></li>
+        <li><a href="#categorias" class="mobile-nav-item">SCULPT SHORTS & BIKERS</a></li>
+        <li><a href="#categorias" class="mobile-nav-item">ACCESORIOS (BINCHAS & LEG WARMERS)</a></li>
+        <li><a href="#beneficios" class="mobile-nav-item">TECNOLOGÍA SQUAT-PROOF</a></li>
+      </ul>
+      
+      <!-- WhatsApp CTA for Mobile Drawer -->
+      <div class="mobile-drawer-cta-group">
+        <a 
+          href="https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20asesoría%20sobre%20las%20prendas." 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-drawer-whatsapp"
+        >
+          <svg class="icon-whatsapp-brand" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.182-.077.357.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.679.116-.174.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.203.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.966-1.393A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+          </svg>
+          <span>Whatsapp</span>
+        </a>
+        <p class="drawer-credit">Aurea Fitness Wear • Desarrollado por Tech Crew CR</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Nav Wrapper */
+  .nav-wrapper {
+    padding: 8px 0;
+    background: #ffffff;
+  }
+
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  /* Brand Logo (Slightly increased size for maximum legibility) */
+  .brand-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .brand-link:hover {
+    opacity: 0.92;
+  }
+
+  .brand-logo {
+    height: 112px; /* Increased from 96px for crisp legibility */
+    width: auto;
+    object-fit: contain;
+    background: transparent;
+    transition: height 0.2s ease;
+  }
+
+  @media (max-width: 1024px) {
+    .brand-logo {
+      height: 98px; /* Tablet view */
+    }
+  }
+
+  @media (max-width: 640px) {
+    .brand-logo {
+      height: 86px; /* Mobile view */
+    }
+  }
+
+  /* Desktop Nav */
+  .desktop-nav {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-nav {
+      display: block;
+    }
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 28px;
+  }
+
+  .nav-link {
+    font-size: 0.96rem; /* Increased from 0.92rem */
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    position: relative;
+    padding: 6px 0;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--text-primary);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--text-primary);
+    transition: width 0.25s ease;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  /* Actions */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Sober Dark Green WhatsApp Button */
+  .btn-header-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-whatsapp, #1b6e3e);
+    color: #ffffff;
+    border: 1px solid var(--color-whatsapp-hover, #145830);
+    padding: 11px 22px;
+    border-radius: var(--radius-xs);
+    font-size: 0.94rem; /* Increased size */
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 10px rgba(27, 110, 62, 0.25);
+  }
+
+  .btn-header-whatsapp:hover {
+    background-color: var(--color-whatsapp-hover, #145830);
+    border-color: var(--color-whatsapp-hover, #145830);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(27, 110, 62, 0.38);
+  }
+
+  .icon-whatsapp-brand {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  .btn-cart-minimal {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-xs);
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+  }
+
+  .btn-cart-minimal:hover {
+    background: var(--bg-sand);
+  }
+
+  .icon-cart {
+    width: 22px;
+    height: 22px;
+  }
+
+  .cart-count {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--text-primary);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hamburger Toggle */
+  .btn-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-medium);
+  }
+
+  @media (min-width: 1024px) {
+    .btn-menu-toggle {
+      display: none;
+    }
+  }
+
+  .bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    transition: all 0.25s ease;
+  }
+
+  .btn-menu-toggle.active .bar-1 {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .btn-menu-toggle.active .bar-2 {
+    opacity: 0;
+  }
+  .btn-menu-toggle.active .bar-3 {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile Drawer */
+  .mobile-drawer {
+    display: none;
+    background: #ffffff;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 2px solid var(--border-medium);
+  }
+
+  .mobile-drawer.open {
+    display: block;
+    animation: slideDown 0.25s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mobile-drawer-inner {
+    padding: 24px 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .mobile-nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mobile-nav-item {
+    font-family: var(--font-display);
+    font-size: 1.35rem; /* Increased size */
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+    padding: 8px 0;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .mobile-nav-item:hover {
+    color: var(--accent-taupe);
+    padding-left: 6px;
+  }
+
+  /* Mobile Drawer WhatsApp CTA */
+  .mobile-drawer-cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-drawer-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--color-whatsapp, #1b6e3e);
+    color: #ffffff;
+    padding: 14px;
+    font-size: 0.95rem; /* Increased size */
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: var(--radius-xs);
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(27, 110, 62, 0.25);
+  }
+
+  .drawer-credit {
+    font-size: 0.82rem; /* Increased size */
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 8px;
+  }
+</style>
+
+<script>
+  const toggleBtn = document.getElementById('mobile-toggle');
+  const drawer = document.getElementById('mobile-drawer');
+
+  if (toggleBtn && drawer) {
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        drawer.classList.add('open');
+        toggleBtn.classList.add('active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    const links = drawer.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        drawer.classList.remove('open');
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+</script>

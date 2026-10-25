@@ -1,16 +1,52 @@
 ---
-
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Benefits from '../components/Benefits.astro';
+import Categories from '../components/Categories.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags for Women's Activewear & Sculpt Seamless -->
+    <title>Aurea Fit // Indumentaria Deportiva Femenina & Seamless Sculpt</title>
+    <meta 
+      name="description" 
+      content="Aurea Fitness Wear. Colección exclusiva de ropa deportiva femenina: Seamless contour leggings, sports bras de soporte ergonómico, sculpt shorts y accesorios athleisure (leg warmers y binchas para el cabello). Confección 100% squat-proof y efecto moldeador." 
+    />
+    <meta name="theme-color" content="#ffffff" />
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Aurea Fit // Seamless Sculpt Women's Activewear" />
+    <meta property="og:description" content="Diseñado para esculpir tu figura y entrenar con máxima confianza. Descubre las colecciones exclusivas para mujer." />
+    <meta property="og:image" content={`${import.meta.env.BASE_URL}images/cat-accessories.jpg`} />
+  </head>
+  
+  <body>
+    <!-- Pure White Header with Prominent Legible Logo -->
+    <Header />
+
+    <!-- Main Content -->
+    <main id="main-content">
+      <!-- High Impact Feminine Sculpt Hero -->
+      <Hero />
+
+      <!-- Value Props & Female Psychology Benefits Bar -->
+      <Benefits />
+
+      <!-- Women's Collections & Categories Grid (Aurea Fit Signature) -->
+      <Categories />
+    </main>
+
+    <!-- Comprehensive Luxury Footer with WhatsApp Advice & Tech Crew CR Attribution -->
+    <Footer />
+  </body>
 </html>
