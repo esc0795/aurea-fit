@@ -1,0 +1,430 @@
+---
+// src/components/Footer.astro
+---
+
+<footer id="contacto" class="site-footer">
+  
+  <!-- WhatsApp Advice Banner -->
+  <div class="footer-cta-banner">
+    <div class="container banner-flex">
+      <div class="banner-text">
+        <span class="luxury-tag luxury-tag-gold">ASESORÍA 1:1</span>
+        <h3 class="banner-heading">¿TIENES DUDAS CON TU TALLA O CALCE?</h3>
+        <p class="banner-sub">
+          Sabemos que elegir la prenda ideal es clave para tu seguridad y comodidad. Escríbenos a nuestra línea oficial de WhatsApp y te ayudamos a elegir el calce perfecto.
+        </p>
+      </div>
+      
+      <div class="banner-action">
+        <a 
+          href="https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20asesoría%20con%20mis%20medidas%20para%20la%20colección%20femenina." 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-footer-wa-rect"
+          title="Abrir chat de WhatsApp"
+        >
+          <svg class="icon-wa-footer" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.182-.077.357.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.679.116-.174.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.203.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.966-1.393A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+          </svg>
+          <span>ASESORÍA EN WHATSAPP</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Footer Columns -->
+  <div class="footer-main">
+    <div class="container footer-grid">
+      
+      <!-- Brand Column with White Logo Blend -->
+      <div class="footer-col brand-col">
+        <div class="footer-logo-card">
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Aurea Fitness Wear" class="footer-logo" />
+        </div>
+        <p class="brand-desc">
+          Indumentaria deportiva femenina de alta compresión y tecnología seamless. Creada para mujeres que buscan realzar su figura y entrenar con total seguridad.
+        </p>
+        <div class="brand-status">
+          <span class="status-indicator"></span>
+          <span>TIENDA ONLINE DISPONIBLE • ENVIOS A TODO EL PAÍS</span>
+        </div>
+      </div>
+
+      <!-- Links: Colecciones -->
+      <div class="footer-col">
+        <h4 class="footer-title">COLECCIONES FEMENINAS</h4>
+        <ul class="footer-links">
+          <li><a href="#categorias">Seamless Contour Leggings</a></li>
+          <li><a href="#categorias">Sports Bras & Crops</a></li>
+          <li><a href="#categorias">Sculpt Shorts & Bikers</a></li>
+          <li><a href="#categorias">Accesorios: Binchas & Leg Warmers</a></li>
+          <li><a href="#categorias">Sets a Juego</a></li>
+        </ul>
+      </div>
+
+      <!-- Links: Guía y Cuidados -->
+      <div class="footer-col">
+        <h4 class="footer-title">SERVICIO AL CLIENTE</h4>
+        <ul class="footer-links">
+          <li><a href="#beneficios">Guía de Tallas y Medidas</a></li>
+          <li><a href="#beneficios">Tecnología 100% Squat-Proof</a></li>
+          <li><a href="#beneficios">Cuidados de la Prenda Seamless</a></li>
+          <li><a href="#contacto">Política de Envíos y Cambios</a></li>
+        </ul>
+      </div>
+
+      <!-- Links: Contacto -->
+      <div class="footer-col">
+        <h4 class="footer-title">ATENCIÓN & CONTACTO</h4>
+        <p class="contact-line">
+          <strong>WhatsApp Asesoría:</strong> +506 8888-8888
+        </p>
+        <p class="contact-line">
+          <strong>Horario:</strong> Lunes a Sábado • 8:00 AM - 7:00 PM
+        </p>
+        <p class="contact-line">
+          <strong>Costa Rica</strong>
+        </p>
+        
+        <div class="social-pills">
+          <a href="#" class="social-pill" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a href="#" class="social-pill" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+            </svg>
+            <span>TikTok</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Bar with Tech Crew CR Attribution -->
+  <div class="footer-bottom">
+    <div class="container bottom-flex">
+      <div class="copyright">
+        © 2026 <strong>AUREA FIT</strong>. Todos los derechos reservados.
+      </div>
+      
+      <!-- Tech Crew CR Attribution -->
+      <div class="dev-credits">
+        <span class="credits-label">Desarrollado con alto rendimiento por</span>
+        <a 
+          href="https://techcrewcr.com" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="tech-crew-tag"
+          title="Sitio web desarrollado por Tech Crew CR"
+        >
+          <span class="tech-symbol">⚡</span>
+          <span class="tech-name">Tech Crew CR</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+<style>
+  .site-footer {
+    background-color: #121215;
+    color: #ffffff;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* WhatsApp Callout */
+  .footer-cta-banner {
+    background: #18181d;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 50px 0;
+  }
+
+  .banner-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 860px) {
+    .banner-flex {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .banner-text {
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .banner-heading {
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    color: #ffffff;
+    line-height: 1.15;
+  }
+
+  .banner-sub {
+    font-size: 1.02rem;
+    color: #a1a1aa;
+    line-height: 1.6;
+  }
+
+  /* Rectangular Sober WhatsApp CTA */
+  .btn-footer-wa-rect {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--color-whatsapp, #1b6e3e);
+    color: #ffffff;
+    border: 1px solid var(--color-whatsapp-hover, #145830);
+    padding: 15px 28px;
+    border-radius: var(--radius-xs);
+    font-size: 0.92rem; /* Increased size */
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(27, 110, 62, 0.28);
+  }
+
+  .btn-footer-wa-rect:hover {
+    background: var(--color-whatsapp-hover, #145830);
+    border-color: var(--color-whatsapp-hover, #145830);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(27, 110, 62, 0.4);
+  }
+
+  .icon-wa-footer {
+    width: 18px;
+    height: 18px;
+    color: #ffffff;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* Main Footer Columns */
+  .footer-main {
+    padding: 70px 0 50px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (min-width: 640px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 50px;
+    }
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer-logo-card {
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: var(--radius-xs);
+    display: inline-flex;
+    width: fit-content;
+  }
+
+  .footer-logo {
+    height: 64px; /* Increased size for crisp visibility */
+    width: auto;
+    object-fit: contain;
+  }
+
+  .brand-desc {
+    font-size: 0.95rem; /* Increased size */
+    color: #a1a1aa;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  .brand-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem; /* Increased size */
+    color: var(--accent-champagne);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .status-indicator {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px #ffffff;
+  }
+
+  .footer-title {
+    font-size: 1.02rem; /* Increased size */
+    color: #ffffff;
+    letter-spacing: 0.06em;
+    position: relative;
+    padding-bottom: 8px;
+  }
+
+  .footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 28px;
+    height: 2px;
+    background: var(--accent-champagne);
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    font-size: 0.95rem; /* Increased size */
+    color: #a1a1aa;
+  }
+
+  .footer-links a:hover {
+    color: #ffffff;
+    padding-left: 6px;
+  }
+
+  .contact-line {
+    font-size: 0.94rem; /* Increased size */
+    color: #a1a1aa;
+    line-height: 1.5;
+  }
+
+  .contact-line strong {
+    color: #ffffff;
+  }
+
+  .social-pills {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .social-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xs);
+    font-size: 0.88rem; /* Increased size */
+    color: #ffffff;
+    transition: all 0.2s ease;
+  }
+
+  .social-pill svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .social-pill:hover {
+    background: rgba(255, 255, 255, 0.14);
+    transform: translateY(-1px);
+  }
+
+  /* Bottom Bar */
+  .footer-bottom {
+    background: #0d0d10;
+    padding: 24px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.9rem; /* Increased size */
+    color: #8b8b94;
+  }
+
+  .bottom-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .bottom-flex {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .copyright strong {
+    color: #ffffff;
+  }
+
+  .dev-credits {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .credits-label {
+    color: #8b8b94;
+    font-size: 0.88rem;
+  }
+
+  .tech-crew-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 6px 14px;
+    border-radius: var(--radius-xs);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.86rem; /* Increased size */
+    letter-spacing: 0.04em;
+    transition: all 0.25s ease;
+  }
+
+  .tech-symbol {
+    color: #facc15;
+  }
+
+  .tech-crew-tag:hover {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+</style>

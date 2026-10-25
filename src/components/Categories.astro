@@ -1,0 +1,300 @@
+---
+// src/components/Categories.astro
+
+const categories = [
+  {
+    id: 'leggings',
+    title: 'SEAMLESS CONTOUR LEGGINGS',
+    subtitle: 'Cintura Alta & Efecto Glute-Sculpt',
+    tag: '100% SQUAT-PROOF',
+    tagClass: 'luxury-tag-dark',
+    image: `${import.meta.env.BASE_URL}images/cat-seamless-leggings.jpg`,
+    modelsCount: 'Colección Sculpt',
+    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Seamless%20Contour%20Leggings.'
+  },
+  {
+    id: 'bras',
+    title: 'SPORTS BRAS & CROPS',
+    subtitle: 'Soporte Ergonómico & Logo Central Aurea',
+    tag: 'MEDIUM & HIGH SUPPORT',
+    tagClass: 'luxury-tag-gold',
+    image: `${import.meta.env.BASE_URL}images/cat-sports-bras.jpg`,
+    modelsCount: 'Colección Impact',
+    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Sports%20Bras%20y%20Crops.'
+  },
+  {
+    id: 'shorts',
+    title: 'SCULPT SHORTS & BIKERS',
+    subtitle: 'Efecto Booty Contour & Ajuste Anatómico',
+    tag: 'BOOTY CONTOUR',
+    tagClass: 'luxury-tag-dark',
+    image: `${import.meta.env.BASE_URL}images/cat-sculpt-shorts.jpg`,
+    modelsCount: 'Colección Dynamic',
+    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Sculpt%20Shorts%20y%20Bikers.'
+  },
+  {
+    id: 'accesorios',
+    title: 'ACCESORIOS ATHLEISURE',
+    subtitle: 'Cintas Elásticas para el Cabello & Leg Warmers',
+    tag: 'BINCHAS & LEG WARMERS',
+    tagClass: 'luxury-tag-gold',
+    image: `${import.meta.env.BASE_URL}images/cat-accessories.jpg`,
+    modelsCount: 'Colección Athleisure',
+    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Accesorios:%20cintas%20elásticas%20para%20el%20cabello%20y%20leg%20warmers.'
+  }
+];
+---
+
+<section id="categorias" class="categories-section">
+  <div class="container">
+    
+    <!-- Section Header aligned with Aurea Fit luxury aesthetic -->
+    <div class="section-header">
+      <div class="header-left">
+        <span class="luxury-tag luxury-tag-gold">COLECCIONES EXCLUSIVAS</span>
+        <h2 class="section-title">
+          DESCUBRE TU <span class="highlight-title">CALCE IDEAL</span>
+        </h2>
+      </div>
+      <p class="section-intro">
+        Cada diseño está pensado para ajustarse anatómicamente a tu cuerpo, brindándote soporte donde lo necesitas y libertad absoluta para entrenar sin preocupaciones.
+      </p>
+    </div>
+
+    <!-- Category Cards Grid -->
+    <div class="category-grid">
+      {categories.map((cat) => (
+        <div class="category-card">
+          
+          <div class="card-media">
+            <img src={cat.image} alt={cat.title} class="card-image" loading="lazy" />
+            <div class="card-scrim"></div>
+          </div>
+
+          <div class="card-tag-wrapper">
+            <span class={`luxury-tag ${cat.tagClass}`}>
+              {cat.tag}
+            </span>
+          </div>
+
+          <div class="card-bottom">
+            <span class="card-sub">{cat.subtitle}</span>
+            <h3 class="card-name">{cat.title}</h3>
+            
+            <a 
+              href={cat.link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-card-explore"
+              aria-label={`Ver colección de ${cat.title}`}
+            >
+              <span>EXPLORAR COLECCIÓN</span>
+              <svg class="icon-arrow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .categories-section {
+    padding: 90px 0 80px;
+    background-color: var(--bg-white);
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+
+  @media (min-width: 860px) {
+    .section-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    color: var(--text-primary);
+    line-height: 1.08;
+    letter-spacing: 0.02em;
+  }
+
+  .highlight-title {
+    color: var(--accent-taupe);
+  }
+
+  .section-intro {
+    font-size: 1.04rem;
+    color: var(--text-secondary);
+    max-width: 480px;
+    line-height: 1.65;
+  }
+
+  /* Grid */
+  .category-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media (min-width: 600px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .category-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+  }
+
+  /* Category Card */
+  .category-card {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    height: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--bg-sand);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  }
+
+  @media (max-width: 600px) {
+    .category-card {
+      height: 480px;
+    }
+  }
+
+  .category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-media {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .category-card:hover .card-image {
+    transform: scale(1.06);
+  }
+
+  .card-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0.05) 40%,
+      rgba(0, 0, 0, 0.65) 80%,
+      rgba(0, 0, 0, 0.85) 100%
+    );
+    transition: background 0.3s ease;
+  }
+
+  .category-card:hover .card-scrim {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.02) 40%,
+      rgba(0, 0, 0, 0.72) 80%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+  }
+
+  /* Tag */
+  .card-tag-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+  }
+
+  /* Bottom Content */
+  .card-bottom {
+    position: relative;
+    z-index: 2;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-sub {
+    font-size: 0.86rem; /* Increased size */
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent-champagne);
+    text-transform: uppercase;
+  }
+
+  .card-name {
+    font-size: 1.35rem;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .btn-card-explore {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    color: var(--text-primary);
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem; /* Increased size */
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .icon-arrow-sm {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.25s ease;
+  }
+
+  .category-card:hover .btn-card-explore {
+    background: #121214;
+    color: #ffffff;
+  }
+
+  .category-card:hover .icon-arrow-sm {
+    transform: translateX(4px);
+  }
+</style>

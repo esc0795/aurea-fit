@@ -1,47 +1,226 @@
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Geist:wght@800&family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Geist:wght@400;600;800;900&family=Oswald:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Aurea Fit Feminine Luxury Palette */
+  --bg-white: #ffffff;
+  --bg-cream: #faf8f5;
+  --bg-sand: #f5f2ec;
+  --bg-stone: #ece7df;
+  
+  --text-primary: #121214;
+  --text-secondary: #4a4a52;
+  --text-muted: #767682;
+  --text-light: #ffffff;
+  
+  --accent-gold: #bfa181;
+  --accent-champagne: #dfcfbe;
+  --accent-blush: #e8d7cf;
+  --accent-taupe: #8f7967;
+  --color-whatsapp: #1b6e3e;
+  --color-whatsapp-hover: #145830;
+  
+  --border-light: rgba(0, 0, 0, 0.08);
+  --border-medium: rgba(0, 0, 0, 0.16);
+  --border-dark: #121214;
+  
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-tech: 'Audiowide', cursive;
+  
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 14px 34px rgba(0, 0, 0, 0.1);
+  --shadow-floating: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
 
 body {
-  background-color: #000000;
-  margin: 0;
-  font-family: Arial, sans-serif;
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-header {
-  padding-top: 32px;
+/* Typography Helpers */
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.logo {
-  height: 240px; /* Adjust size as needed */
-}
-
-.menu {
-  display: flex;
-  justify-content: center;
-  gap: 240px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu li a {
+a {
+  color: inherit;
   text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8f8f8;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4cfc7;
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-taupe);
+}
+
+/* Luxury Feminine Badges & Tags */
+.luxury-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.86rem; /* Increased size */
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  background: var(--bg-sand);
+  color: var(--text-primary);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-medium);
+}
+
+.luxury-tag-dark {
+  background: var(--text-primary);
   color: #ffffff;
-  font-weight: bold;
-  font-size: 2.1rem;
-  transition: color 0.2s;
+  border-color: var(--text-primary);
 }
 
-.menu li a:hover {
-  color: #a72222;
+.luxury-tag-gold {
+  background: #fcf8f3;
+  color: var(--accent-taupe);
+  border-color: var(--accent-champagne);
 }
 
-.menu-text {
-  font-family: "Oswald", sans-serif;
+/* Global Hero Box Buttons (Left-to-Right Black Hover Deploy) */
+.hero-box-btn {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  padding: 16px 36px !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #121214 !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid #121214 !important;
+  border-radius: 2px !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+  box-sizing: border-box !important;
+  transition: color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
+}
+
+.hero-box-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #121214;
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-box-btn:hover::before {
+  transform: scaleX(1);
+}
+
+.hero-box-btn:hover {
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+.hero-box-btn span,
+.hero-box-btn svg {
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease, transform 0.25s ease;
+}
+
+.hero-btn-icon {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  fill: currentColor !important;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.hero-box-btn:hover .hero-btn-icon {
+  color: #ffffff !important;
+  transform: translateX(3px);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
 }

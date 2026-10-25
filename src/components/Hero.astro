@@ -1,0 +1,327 @@
+---
+// src/components/Hero.astro
+---
+
+<section class="hero-section">
+  <!-- Dynamic Background with High-Definition Model Visibility -->
+  <div class="hero-bg-container">
+    <img 
+      src={`${import.meta.env.BASE_URL}images/cat-accessories.jpg`} 
+      alt="Aurea Fit Colección Femenina Seamless Activewear & Accesorios" 
+      class="hero-bg-image" 
+    />
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container hero-content-container">
+    <div class="hero-content">
+
+      <!-- Main Headline -->
+      <h1 class="hero-title">
+        ENTRENA CON <br />
+        <span class="hero-highlight">MÁXIMA CONFIANZA.</span>
+      </h1>
+
+      <!-- Subtitle with Increased Legibility -->
+      <p class="hero-description">
+        Indumentaria activa femenina diseñada para realzar tus curvas naturales. Confeccionada con pretina de compresión alta que no se enrolla, soporte ergonómico y tejido 100% libre de transparencias.
+      </p>
+
+      <!-- Rectangular CTA Button with Left-to-Right Black Hover Deploy -->
+      <div class="hero-cta-group">
+        <a href="#categorias" class="hero-box-btn">
+          <span>EXPLORAR TIENDA</span>
+          <svg class="hero-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;min-width:16px;min-height:16px;">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Trust Metrics Bar with Increased Legibility -->
+      <div class="hero-trust-bar">
+        <div class="trust-item">
+          <span class="trust-title">100% SQUAT-PROOF</span>
+          <span class="trust-desc">Cero transparencias comprobado</span>
+        </div>
+        <div class="trust-sep"></div>
+        <div class="trust-item">
+          <span class="trust-title">GLUTE-CONTOUR</span>
+          <span class="trust-desc">Patrón anatómico estilizador</span>
+        </div>
+        <div class="trust-sep"></div>
+        <div class="trust-item">
+          <span class="trust-title">SEGUNDA PIEL</span>
+          <span class="trust-desc">Suavidad y ajuste sin molestias</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    position: relative;
+    min-height: 86vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 70px 0 60px;
+    background-color: #faf8f5;
+  }
+
+  /* Background Image & Optimized Visibility */
+  .hero-bg-container {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* On PC: place woman on the right side of the screen */
+    object-position: right 22%;
+    transform: scale(1.01);
+  }
+
+  /* Overlay: Leaves the right half transparent so the female model is completely sharp & visible */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      #faf8f5 0%,
+      rgba(250, 248, 245, 0.98) 32%,
+      rgba(250, 248, 245, 0.72) 48%,
+      rgba(250, 248, 245, 0.15) 62%,
+      transparent 72%
+    );
+  }
+
+  /* Tablet Responsiveness (768px - 1024px): Centered */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .hero-section {
+      min-height: 84vh;
+      padding: 60px 0 50px;
+    }
+    .hero-bg-image {
+      object-position: center 25%;
+    }
+    .hero-overlay {
+      background: linear-gradient(
+        to right,
+        rgba(250, 248, 245, 0.96) 0%,
+        rgba(250, 248, 245, 0.88) 45%,
+        rgba(250, 248, 245, 0.35) 70%,
+        transparent 100%
+      );
+    }
+    .hero-content {
+      max-width: 520px;
+    }
+  }
+
+  /* Mobile Responsiveness (< 768px): Centered */
+  @media (max-width: 767px) {
+    .hero-section {
+      min-height: 94vh;
+      display: flex;
+      align-items: flex-end; /* Text sits elegantly at bottom */
+      padding: 24px 0 42px;
+    }
+    .hero-bg-image {
+      /* Positions the model centered at top */
+      object-position: center 15%;
+    }
+    .hero-overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(250, 248, 245, 0) 0%,
+        rgba(250, 248, 245, 0.25) 30%,
+        rgba(250, 248, 245, 0.85) 55%,
+        #faf8f5 76%,
+        #faf8f5 100%
+      );
+    }
+  }
+
+  /* Content */
+  .hero-content-container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-content {
+    max-width: 630px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 4.8vw, 4.2rem);
+    line-height: 1.05;
+    color: var(--text-primary);
+    margin-bottom: 22px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-highlight {
+    background: linear-gradient(135deg, #121214 0%, #8f7967 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-description {
+    font-size: clamp(1.08rem, 1.3vw, 1.22rem); /* Increased size for enhanced readability */
+    color: var(--text-secondary);
+    line-height: 1.68;
+    margin-bottom: 38px;
+    max-width: 560px;
+    font-weight: 400;
+  }
+
+  /* Two Rectangular Boxes */
+  .hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  /* Synchronous Direct Button Styles (No FOUC / Immediate Rendering) */
+  .hero-box-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 36px;
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #121214;
+    background-color: #ffffff;
+    border: 1.5px solid #121214;
+    border-radius: 2px;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+    box-sizing: border-box;
+    transition: color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  /* Left-to-Right Black Fill Animation */
+  .hero-box-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #121214;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .hero-box-btn:hover::before {
+    transform: scaleX(1);
+  }
+
+  .hero-box-btn:hover {
+    color: #ffffff;
+    border-color: #121214;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+  }
+
+  .hero-box-btn span {
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s ease;
+  }
+
+  .hero-btn-icon {
+    position: relative;
+    z-index: 2;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
+    fill: currentColor;
+    flex-shrink: 0;
+    display: inline-block;
+    transition: color 0.3s ease, transform 0.25s ease;
+  }
+
+  .hero-box-btn:hover .hero-btn-icon {
+    color: #ffffff;
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 640px) {
+    .hero-cta-group {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      margin-bottom: 38px;
+    }
+    .hero-box-btn {
+      width: 100%;
+      padding: 16px 24px;
+    }
+  }
+
+  /* Trust Bar */
+  .hero-trust-bar {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .trust-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .trust-title {
+    font-size: 0.98rem; /* Increased size */
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: 0.06em;
+  }
+
+  .trust-desc {
+    font-size: 0.92rem; /* Increased size */
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .trust-sep {
+    width: 1px;
+    height: 34px;
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  @media (max-width: 640px) {
+    .hero-trust-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      padding-top: 20px;
+    }
+    .trust-sep {
+      display: none;
+    }
+  }
+</style>
