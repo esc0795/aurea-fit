@@ -1,0 +1,197 @@
+---
+// src/components/FloatingWhatsApp.astro
+interface Props {
+  phoneNumber?: string;
+  message?: string;
+}
+
+const {
+  phoneNumber = "50688888888",
+  message = "Hola Aurea, vengo desde la página web y deseo más información.",
+} = Astro.props;
+
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+---
+
+<aside
+  class="floating-whatsapp-wrapper"
+  aria-label="Contacto directo por WhatsApp"
+>
+  <a
+    href={whatsappUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn-floating-whatsapp"
+    aria-label="Chatear con Aurea Fit por WhatsApp"
+    title="Chatear por WhatsApp con Aurea Fit"
+    id="floating-whatsapp"
+  >
+    <!-- Subtle Ambient Radar Waves -->
+    <span class="wa-radar-ring ring-1" aria-hidden="true"></span>
+    <span class="wa-radar-ring ring-2" aria-hidden="true"></span>
+
+    <!-- WhatsApp Official Icon -->
+    <svg
+      class="icon-floating-wa"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.182-.077.357.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.679.116-.174.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.203.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.966-1.393A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"
+      ></path>
+    </svg>
+
+    <!-- Desktop Tooltip / Pill on Hover -->
+    <span class="floating-wa-tooltip" aria-hidden="true"> Ir a Whatsapp </span>
+  </a>
+</aside>
+
+<style>
+  .floating-whatsapp-wrapper {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    right: calc(20px + env(safe-area-inset-right, 0px));
+    z-index: 995;
+    pointer-events: none;
+  }
+
+  .btn-floating-whatsapp {
+    pointer-events: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, #25d366 0%, #1da851 100%);
+    color: #ffffff;
+    box-shadow:
+      0 6px 18px rgba(29, 168, 81, 0.4),
+      0 10px 30px rgba(0, 0, 0, 0.16);
+    transition:
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.3s ease;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-floating-whatsapp:hover {
+    transform: scale(1.08) translateY(-3px);
+    box-shadow:
+      0 8px 24px rgba(29, 168, 81, 0.55),
+      0 14px 36px rgba(0, 0, 0, 0.22);
+  }
+
+  .btn-floating-whatsapp:active {
+    transform: scale(0.95);
+  }
+
+  /* Radar Pulse Animation */
+  .wa-radar-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-full);
+    border: 2px solid #25d366;
+    pointer-events: none;
+    animation: waRadar 2.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  }
+
+  .ring-2 {
+    animation-delay: 1.4s;
+  }
+
+  @keyframes waRadar {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+    70% {
+      transform: scale(1.55);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  .icon-floating-wa {
+    width: 30px;
+    height: 30px;
+    fill: currentColor;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  }
+
+  /* Tooltip for desktop hover */
+  .floating-wa-tooltip {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .floating-wa-tooltip {
+      display: block;
+      position: absolute;
+      right: calc(100% + 14px);
+      top: 50%;
+      transform: translateY(-50%) translateX(6px);
+      background: var(--text-primary, #121214);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: var(--radius-full, 9999px);
+      font-family: var(--font-body, sans-serif);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .floating-wa-tooltip::after {
+      content: "";
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent transparent
+        var(--text-primary, #121214);
+    }
+
+    .btn-floating-whatsapp:hover .floating-wa-tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+  }
+
+  /* Mobile Adjustments */
+  @media (max-width: 640px) {
+    .floating-whatsapp-wrapper {
+      bottom: 20px;
+      right: 18px;
+    }
+
+    .btn-floating-whatsapp {
+      width: 56px;
+      height: 56px;
+    }
+
+    .icon-floating-wa {
+      width: 28px;
+      height: 28px;
+    }
+  }
+</style>
