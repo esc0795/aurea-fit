@@ -3,25 +3,18 @@
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Benefits from '../components/Benefits.astro';
-import CategoryFilter from '../components/CategoryFilter.astro';
-import ProductCard from '../components/ProductCard.astro';
+import Categories from '../components/Categories.astro';
 import Footer from '../components/Footer.astro';
-import { dataProvider, type Category, type Product } from '../lib/pocketbase';
+import { dataProvider, type Category } from '../lib/pocketbase';
 import '../styles/global.css';
 
-// Fetch categories and active products via dataProvider (supports both PocketBase and Mock Mode)
+// Fetch categories via dataProvider (supports both PocketBase and Mock Mode)
 let categories: Category[] = [];
-let products: Product[] = [];
 
 try {
-  const [categoriesData, productsData] = await Promise.all([
-    dataProvider.getCategories(),
-    dataProvider.getProducts({ onlyActive: true }),
-  ]);
-  categories = categoriesData;
-  products = productsData;
+  categories = await dataProvider.getCategories();
 } catch (error) {
-  console.error('Error al consultar datos en index.astro:', error);
+  console.error('Error al consultar categorias en index.astro:', error);
 }
 ---
 
@@ -60,45 +53,8 @@ try {
       <!-- Value Props & Female Psychology Benefits Bar -->
       <Benefits />
 
-      <!-- PocketBase Dynamic Live Catalog Section -->
-      <section id="categorias" class="catalog-section">
-        <div class="container">
-          
-          <div class="catalog-header">
-            <span class="luxury-tag luxury-tag-gold">COLECCIÓN ACTIVA</span>
-            <h2 class="catalog-title">
-              EXPLORA NUESTRO <span class="highlight-title">CATÁLOGO</span>
-            </h2>
-            <p class="catalog-subtitle">
-              Prendas deportivas femeninas confeccionadas con compresión inteligente, tejido 100% squat-proof y soporte ergonómico para esculpir tu figura.
-            </p>
-          </div>
-
-          <!-- Navigable Categories Pills (Todos + Categories) -->
-          <CategoryFilter categories={categories} activeSlug="all" />
-
-          <!-- Responsive Products Grid -->
-          {products.length > 0 ? (
-            <div class="products-grid">
-              {products.map((product) => (
-                <ProductCard product={product} />
-              ))}
-            </div>
-          ) : (
-            <div class="catalog-empty-state">
-              <div class="empty-icon-box">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="8" y1="12" x2="16" y2="12"></line>
-                </svg>
-              </div>
-              <h3>Pronto agregaremos nuevas prendas</h3>
-              <p>Estamos actualizando el inventario de esta colección. Si buscas una prenda específica, contáctanos directamente.</p>
-            </div>
-          )}
-
-        </div>
-      </section>
+      <!-- Explorar Tienda Section: High-impact Categories Grid (No price, No sizes) -->
+      <Categories categories={categories} />
     </main>
 
     <!-- Comprehensive Luxury Footer -->

@@ -71,20 +71,42 @@ export interface ProductsQueryOptions {
   onlyActive?: boolean;
 }
 
+/**
+ * Normalizes category names/slugs into URL-friendly standard slugs.
+ * Ensures 'Bras & crops' maps cleanly to 'bras', avoiding 404 URL encode mismatches.
+ */
+export function slugifyCategory(nameOrSlug: string): string {
+  if (!nameOrSlug) return '';
+  const lower = nameOrSlug.toLowerCase().trim();
+  if (lower.includes('bra')) return 'bras';
+  if (lower.includes('legging')) return 'leggings';
+  if (lower.includes('short')) return 'shorts';
+  if (lower.includes('accesorio')) return 'accesorios';
+  return lower.replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
 export const dataProvider = {
   /**
-   * Fetches all categories sorted by name
+   * Fetches all categories sorted by name with normalized URL slugs
    */
   async getCategories(): Promise<Category[]> {
     if (isMockMode) {
-      return [...mockCategories].sort((a, b) => a.name.localeCompare(b.name));
+      return [...mockCategories]
+        .map((cat) => ({ ...cat, slug: slugifyCategory(cat.slug || cat.name) }))
+        .sort((a, b) => a.name.localeCompare(b.name));
     }
 
     try {
-      return await pb.collection('categories').getFullList<Category>({ sort: 'name' });
+      const records = await pb.collection('categories').getFullList<Category>({ sort: 'name' });
+      return records.map((cat) => ({
+        ...cat,
+        slug: slugifyCategory(cat.slug || cat.name),
+      }));
     } catch (err) {
       console.warn('⚠️ [PocketBase Provider] Error fetching categories, falling back to mock:', err);
-      return [...mockCategories].sort((a, b) => a.name.localeCompare(b.name));
+      return [...mockCategories]
+        .map((cat) => ({ ...cat, slug: slugifyCategory(cat.slug || cat.name) }))
+        .sort((a, b) => a.name.localeCompare(b.name));
     }
   },
 

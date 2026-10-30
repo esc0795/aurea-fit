@@ -1,6 +1,17 @@
 ---
 // src/components/Header.astro
 import FloatingWhatsApp from './FloatingWhatsApp.astro';
+import CartDrawer from './CartDrawer.astro';
+import { dataProvider, type Category } from '../lib/pocketbase';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+let categories: Category[] = [];
+try {
+  categories = await dataProvider.getCategories();
+} catch (e) {
+  console.error('Error al cargar categorias en Header.astro:', e);
+}
 ---
 
 <header class="site-header">
@@ -22,52 +33,58 @@ import FloatingWhatsApp from './FloatingWhatsApp.astro';
       </button>
 
       <!-- Brand Logo (Centered on Mobile, Left-aligned on Desktop) -->
-      <a href={import.meta.env.BASE_URL} class="brand-link" aria-label="Aurea Fit - Inicio">
+      <a href={baseUrl} class="brand-link" aria-label="Aurea Fit - Inicio">
         <img 
-          src={`${import.meta.env.BASE_URL}logo.png`} 
+          src={`${baseUrl}logo.png`} 
           alt="Aurea Fitness Wear" 
           class="brand-logo" 
         />
       </a>
 
-      <!-- Desktop Navigation Menu (Horizontal menu for desktop >= 1024px) -->
+      <!-- Desktop Navigation Menu (Dynamically scalable with PocketBase) -->
       <nav class="desktop-nav" aria-label="Navegación principal">
         <ul class="nav-links">
-          <li><a href={import.meta.env.BASE_URL} class="nav-link active">INICIO</a></li>
-          <li><a href="#categorias" class="nav-link">LEGGINGS</a></li>
-          <li><a href="#categorias" class="nav-link">TOPS & BRAS</a></li>
-          <li><a href="#categorias" class="nav-link">SHORTS</a></li>
-          <li><a href="#categorias" class="nav-link">ACCESORIOS</a></li>
-          <li><a href="#beneficios" class="nav-link">CALIDAD SEAMLESS</a></li>
+          <li><a href={baseUrl} class="nav-link active">INICIO</a></li>
+          {categories.map((cat) => (
+            <li>
+              <a href={`${baseUrl}categoria/${encodeURIComponent(cat.slug)}`} class="nav-link">
+                {cat.name.toUpperCase()}
+              </a>
+            </li>
+          ))}
+          <li><a href={`${baseUrl}#beneficios`} class="nav-link">CALIDAD SEAMLESS</a></li>
         </ul>
       </nav>
 
       <!-- Action Items (Right Aligned: Shopping Bag) -->
       <div class="nav-actions">
-        <!-- Shopping Cart Icon -->
-        <a href="#categorias" class="btn-cart-minimal" aria-label="Bolsa de compras" title="Bolsa de compras">
+        <!-- Shopping Cart Icon Button -->
+        <button type="button" class="btn-cart-minimal" aria-label="Abrir bolsa de compras" title="Bolsa de compras">
           <svg class="icon-cart" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
           <span class="cart-count">0</span>
-        </a>
+        </button>
       </div>
 
     </div>
   </div>
 
-  <!-- Mobile Drawer Navigation -->
+  <!-- Mobile Drawer Navigation (Dynamically scalable with PocketBase) -->
   <div id="mobile-drawer" class="mobile-drawer" aria-label="Menú móvil desplegable">
     <div class="container mobile-drawer-inner">
       <ul class="mobile-nav-links">
-        <li><a href={import.meta.env.BASE_URL} class="mobile-nav-item">INICIO</a></li>
-        <li><a href="#categorias" class="mobile-nav-item">SEAMLESS CONTOUR LEGGINGS</a></li>
-        <li><a href="#categorias" class="mobile-nav-item">SPORTS BRAS & TOPS</a></li>
-        <li><a href="#categorias" class="mobile-nav-item">SCULPT SHORTS & BIKERS</a></li>
-        <li><a href="#categorias" class="mobile-nav-item">ACCESORIOS (BINCHAS & LEG WARMERS)</a></li>
-        <li><a href="#beneficios" class="mobile-nav-item">TECNOLOGÍA SQUAT-PROOF</a></li>
+        <li><a href={baseUrl} class="mobile-nav-item">INICIO</a></li>
+        {categories.map((cat) => (
+          <li>
+            <a href={`${baseUrl}categoria/${encodeURIComponent(cat.slug)}`} class="mobile-nav-item">
+              {cat.name.toUpperCase()}
+            </a>
+          </li>
+        ))}
+        <li><a href={`${baseUrl}#beneficios`} class="mobile-nav-item">TECNOLOGÍA SQUAT-PROOF</a></li>
       </ul>
       <p class="drawer-credit">Aurea Fitness Wear • Desarrollado por Tech Crew CR</p>
     </div>
@@ -76,6 +93,9 @@ import FloatingWhatsApp from './FloatingWhatsApp.astro';
 
 <!-- Floating WhatsApp Action Button -->
 <FloatingWhatsApp />
+
+<!-- Slide-over Cart Drawer -->
+<CartDrawer />
 
 <style>
   .site-header {

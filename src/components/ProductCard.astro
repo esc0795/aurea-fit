@@ -32,7 +32,7 @@ const productUrl = `${baseUrl}producto/${encodeURIComponent(product.slug)}`;
 ---
 
 <article class="product-card">
-  <!-- Image Container with Scrim & Tag -->
+  <!-- Image Container with Scrim & Tag (Clickable to Product Page) -->
   <a href={productUrl} class="product-image-link" aria-label={`Ver detalles de ${product.name}`}>
     <div class="product-image-wrapper">
       <img 
@@ -76,15 +76,6 @@ const productUrl = `${baseUrl}producto/${encodeURIComponent(product.slug)}`;
         </div>
       </div>
     )}
-
-    <!-- Action CTA: Modern Rounded Pill Button -->
-    <a href={productUrl} class="btn-product-detail">
-      <span>Ver detalles</span>
-      <svg class="icon-arrow-card" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
-      </svg>
-    </a>
   </div>
 </article>
 
@@ -254,43 +245,5 @@ const productUrl = `${baseUrl}producto/${encodeURIComponent(product.slug)}`;
     background: transparent;
     text-decoration: line-through;
     color: var(--text-muted, #767682);
-  }
-
-  /* Button Action */
-  .btn-product-detail {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 12px 20px;
-    border-radius: var(--radius-full, 9999px);
-    font-family: var(--font-body, sans-serif);
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #121214;
-    color: #ffffff;
-    border: 1.5px solid #121214;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .btn-product-detail:hover {
-    background: var(--accent-taupe, #8f7967);
-    border-color: var(--accent-taupe, #8f7967);
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(143, 121, 103, 0.35);
-  }
-
-  .icon-arrow-card {
-    transition: transform 0.2s ease;
-  }
-
-  .btn-product-detail:hover .icon-arrow-card {
-    transform: translateX(3px);
   }
 </style>

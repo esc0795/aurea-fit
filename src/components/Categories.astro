@@ -1,103 +1,126 @@
 ---
 // src/components/Categories.astro
+import { dataProvider, type Category } from '../lib/pocketbase';
 
-const categories = [
-  {
-    id: 'leggings',
-    title: 'SEAMLESS CONTOUR LEGGINGS',
-    subtitle: 'Cintura Alta & Efecto Glute-Sculpt',
+interface Props {
+  categories?: Category[];
+}
+
+const baseUrl = import.meta.env.BASE_URL;
+
+let categoriesList: Category[] = Astro.props.categories || [];
+if (!categoriesList || categoriesList.length === 0) {
+  try {
+    categoriesList = await dataProvider.getCategories();
+  } catch (e) {
+    console.error('Error cargando categorias en Categories.astro:', e);
+  }
+}
+
+// Category design metadata map for tailored presentation
+const categoryMetaMap: Record<string, { image: string; tag: string; tagClass: string; subtitle: string }> = {
+  leggings: {
+    image: `${baseUrl}images/cat-seamless-leggings.jpg`,
     tag: '100% SQUAT-PROOF',
     tagClass: 'luxury-tag-dark',
-    image: `${import.meta.env.BASE_URL}images/cat-seamless-leggings.jpg`,
-    modelsCount: 'Colección Sculpt',
-    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Seamless%20Contour%20Leggings.'
+    subtitle: 'Cintura Alta & Efecto Glute-Sculpt'
   },
-  {
-    id: 'bras',
-    title: 'SPORTS BRAS & CROPS',
-    subtitle: 'Soporte Ergonómico & Logo Central Aurea',
+  bras: {
+    image: `${baseUrl}images/cat-sports-bras.jpg`,
     tag: 'MEDIUM & HIGH SUPPORT',
     tagClass: 'luxury-tag-gold',
-    image: `${import.meta.env.BASE_URL}images/cat-sports-bras.jpg`,
-    modelsCount: 'Colección Impact',
-    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Sports%20Bras%20y%20Crops.'
+    subtitle: 'Soporte Ergonómico & Acabado Seamless'
   },
-  {
-    id: 'shorts',
-    title: 'SCULPT SHORTS & BIKERS',
-    subtitle: 'Efecto Booty Contour & Ajuste Anatómico',
+  shorts: {
+    image: `${baseUrl}images/cat-sculpt-shorts.jpg`,
     tag: 'BOOTY CONTOUR',
     tagClass: 'luxury-tag-dark',
-    image: `${import.meta.env.BASE_URL}images/cat-sculpt-shorts.jpg`,
-    modelsCount: 'Colección Dynamic',
-    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Sculpt%20Shorts%20y%20Bikers.'
+    subtitle: 'Efecto Booty Contour & Ajuste Anatómico'
   },
-  {
-    id: 'accesorios',
-    title: 'ACCESORIOS ATHLEISURE',
-    subtitle: 'Cintas Elásticas para el Cabello & Leg Warmers',
-    tag: 'BINCHAS & LEG WARMERS',
+  accesorios: {
+    image: `${baseUrl}images/cat-accessories.jpg`,
+    tag: 'ATHLEISURE GEAR',
     tagClass: 'luxury-tag-gold',
-    image: `${import.meta.env.BASE_URL}images/cat-accessories.jpg`,
-    modelsCount: 'Colección Athleisure',
-    link: 'https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20ver%20modelos%20disponibles%20de%20Accesorios:%20cintas%20elásticas%20para%20el%20cabello%20y%20leg%20warmers.'
+    subtitle: 'Cintas Elásticas para el Cabello & Leg Warmers'
   }
-];
+};
 ---
 
-<section id="categorias" class="categories-section">
+<section id="explorar-tienda" class="categories-section">
   <div class="container">
     
     <!-- Section Header aligned with Aurea Fit luxury aesthetic -->
     <div class="section-header">
       <div class="header-left">
-        <span class="luxury-tag luxury-tag-gold">COLECCIONES EXCLUSIVAS</span>
+        <span class="luxury-tag luxury-tag-gold">EXPLORAR TIENDA</span>
         <h2 class="section-title">
-          DESCUBRE TU <span class="highlight-title">CALCE IDEAL</span>
+          DESCUBRE NUESTRAS <span class="highlight-title">COLECCIONES</span>
         </h2>
       </div>
       <p class="section-intro">
-        Cada diseño está pensado para ajustarse anatómicamente a tu cuerpo, brindándote soporte donde lo necesitas y libertad absoluta para entrenar sin preocupaciones.
+        Cada diseño está pensado para ajustarse anatómicamente a tu cuerpo, brindándote soporte ergonómico, tejido 100% squat-proof y libertad absoluta para entrenar.
       </p>
     </div>
 
-    <!-- Category Cards Grid -->
+    <!-- Category Cards Grid (Scalable dynamically with PocketBase) -->
     <div class="category-grid">
-      {categories.map((cat) => (
-        <div class="category-card">
-          
-          <div class="card-media">
-            <img src={cat.image} alt={cat.title} class="card-image" loading="lazy" />
-            <div class="card-scrim"></div>
-          </div>
+      {categoriesList.map((cat) => {
+        const slugKey = cat.slug?.toLowerCase().includes('bra') || cat.name?.toLowerCase().includes('bra')
+          ? 'bras'
+          : cat.slug?.toLowerCase().includes('legging') || cat.name?.toLowerCase().includes('legging')
+          ? 'leggings'
+          : cat.slug?.toLowerCase().includes('short') || cat.name?.toLowerCase().includes('short')
+          ? 'shorts'
+          : cat.slug?.toLowerCase().includes('accesorio') || cat.name?.toLowerCase().includes('accesorio')
+          ? 'accesorios'
+          : cat.slug;
 
-          <div class="card-tag-wrapper">
-            <span class={`luxury-tag ${cat.tagClass}`}>
-              {cat.tag}
-            </span>
-          </div>
+        const meta = categoryMetaMap[slugKey] || {
+          image: `${baseUrl}images/cat-sports-bras.jpg`,
+          tag: 'NUEVA COLECCIÓN',
+          tagClass: 'luxury-tag-gold',
+          subtitle: 'Colección Aurea Fit'
+        };
+        const categoryUrl = `${baseUrl}categoria/${encodeURIComponent(cat.slug)}`;
 
-          <div class="card-bottom">
-            <span class="card-sub">{cat.subtitle}</span>
-            <h3 class="card-name">{cat.title}</h3>
+        return (
+          <div class="category-card">
             
-            <a 
-              href={cat.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="btn-card-explore"
-              aria-label={`Ver colección de ${cat.title}`}
-            >
-              <span>EXPLORAR COLECCIÓN</span>
-              <svg class="icon-arrow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
+            <a href={categoryUrl} class="card-media-link" aria-label={`Ver colección ${cat.name}`}>
+              <div class="card-media">
+                <img src={meta.image} alt={cat.name} class="card-image" loading="lazy" />
+                <div class="card-scrim"></div>
+              </div>
             </a>
-          </div>
 
-        </div>
-      ))}
+            <div class="card-tag-wrapper">
+              <span class={`luxury-tag ${meta.tagClass}`}>
+                {meta.tag}
+              </span>
+            </div>
+
+            <div class="card-bottom">
+              <span class="card-sub">{meta.subtitle}</span>
+              <h3 class="card-name">
+                <a href={categoryUrl}>{cat.name}</a>
+              </h3>
+              
+              <a 
+                href={categoryUrl} 
+                class="btn-card-explore"
+                aria-label={`Ver detalles de ${cat.name}`}
+              >
+                <span>VER DETALLES</span>
+                <svg class="icon-arrow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        );
+      })}
     </div>
 
   </div>
@@ -194,10 +217,17 @@ const categories = [
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
   }
 
-  .card-media {
+  .card-media-link {
     position: absolute;
     inset: 0;
     z-index: 1;
+    display: block;
+    text-decoration: none;
+  }
+
+  .card-media {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
   }
 
@@ -221,7 +251,7 @@ const categories = [
       rgba(0, 0, 0, 0.15) 0%,
       rgba(0, 0, 0, 0.05) 40%,
       rgba(0, 0, 0, 0.65) 80%,
-      rgba(0, 0, 0, 0.85) 100%
+      rgba(0, 0, 0, 0.88) 100%
     );
     transition: background 0.3s ease;
   }
@@ -232,7 +262,7 @@ const categories = [
       rgba(0, 0, 0, 0.1) 0%,
       rgba(0, 0, 0, 0.02) 40%,
       rgba(0, 0, 0, 0.72) 80%,
-      rgba(0, 0, 0, 0.9) 100%
+      rgba(0, 0, 0, 0.92) 100%
     );
   }
 
@@ -241,6 +271,7 @@ const categories = [
     position: relative;
     z-index: 2;
     padding: 20px;
+    pointer-events: none;
   }
 
   /* Bottom Content */
@@ -254,7 +285,7 @@ const categories = [
   }
 
   .card-sub {
-    font-size: 0.86rem; /* Increased size */
+    font-size: 0.86rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     color: var(--accent-champagne);
@@ -266,6 +297,17 @@ const categories = [
     color: #ffffff;
     line-height: 1.15;
     margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .card-name a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .card-name a:hover {
+    color: var(--accent-champagne);
   }
 
   .btn-card-explore {
@@ -279,6 +321,7 @@ const categories = [
     font-size: 0.88rem;
     font-weight: 700;
     letter-spacing: 0.08em;
+    text-decoration: none;
     transition: all 0.25s ease;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   }

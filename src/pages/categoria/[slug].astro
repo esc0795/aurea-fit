@@ -10,11 +10,29 @@ import '../../styles/global.css';
 export async function getStaticPaths() {
   try {
     const categories = await dataProvider.getCategories();
+    const paths: { params: { slug: string }; props: { category: Category; allCategories: Category[] } }[] = [];
 
-    return categories.map((cat) => ({
-      params: { slug: cat.slug },
-      props: { category: cat, allCategories: categories },
-    }));
+    for (const cat of categories) {
+      // Primary clean slug (e.g. 'bras', 'leggings', 'shorts')
+      paths.push({
+        params: { slug: cat.slug },
+        props: { category: cat, allCategories: categories },
+      });
+
+      // Robust alias routes for Bras & Crops to guarantee 100% redirection success
+      if (cat.slug === 'bras' || cat.name.toLowerCase().includes('bra')) {
+        paths.push({
+          params: { slug: 'bras-crops' },
+          props: { category: cat, allCategories: categories },
+        });
+        paths.push({
+          params: { slug: 'Bras & crops' },
+          props: { category: cat, allCategories: categories },
+        });
+      }
+    }
+
+    return paths;
   } catch (error) {
     console.error('Error en getStaticPaths para categoria/[slug]:', error);
     return [];
@@ -75,7 +93,7 @@ if (category?.id) {
           <ol class="breadcrumb-list">
             <li><a href={baseUrl}>Inicio</a></li>
             <li class="breadcrumb-sep">/</li>
-            <li><a href={`${baseUrl}#categorias`}>Catálogo</a></li>
+            <li><a href={`${baseUrl}#explorar-tienda`}>Colecciones</a></li>
             <li class="breadcrumb-sep">/</li>
             <li class="breadcrumb-current" aria-current="page">{category.name}</li>
           </ol>
