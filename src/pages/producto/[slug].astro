@@ -1,0 +1,652 @@
+---
+// src/pages/producto/[slug].astro
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { dataProvider, getFileUrl, type Product } from '../../lib/pocketbase';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  try {
+    const products = await dataProvider.getProducts({ onlyActive: true });
+
+    return products.map((product) => ({
+      params: { slug: product.slug },
+      props: { product },
+    }));
+  } catch (error) {
+    console.error('Error en getStaticPaths para producto/[slug]:', error);
+    return [];
+  }
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+// Parse sizes_stock
+const sizeEntries = Object.entries(product.sizes_stock || {}).map(([size, qty]) => {
+  const stockNum = typeof qty === 'number' ? qty : parseInt(String(qty), 10);
+  const stock = isNaN(stockNum) ? 0 : stockNum;
+  return {
+    size,
+    stock,
+    available: stock > 0,
+  };
+});
+
+// Default pre-selected size
+const defaultSize = sizeEntries.find((s) => s.available)?.size || sizeEntries[0]?.size || 'Única';
+
+// Format Gallery Images
+const galleryImages = (product.images || []).map((imgName, index) => ({
+  full: getFileUrl(product.collectionId, product.id, imgName),
+  thumb: getFileUrl(product.collectionId, product.id, imgName, '160x160'),
+  index,
+}));
+
+const initialMainImage = galleryImages[0]?.full || `${baseUrl}images/cat-accessories.jpg`;
+
+const formattedPrice = `₡${Number(product.price || 0).toLocaleString('es-CR')}`;
+const categoryName = product.expand?.category?.name || 'Aurea Activewear';
+const categorySlug = product.expand?.category?.slug || '';
+
+// Base initial WhatsApp URL
+const waPhone = '50688888888';
+const initialWaMessage = `Hola Aurea Fit, deseo ordenar el producto *${product.name}* en talla *${defaultSize}* (Precio: ${formattedPrice}).`;
+const initialWaUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(initialWaMessage)}`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{product.name} // Aurea Fit Seamless</title>
+    <meta 
+      name="description" 
+      content={`${product.name} en Aurea Fit. ${product.description || 'Prenda deportiva femenina diseñada con tecnología seamless, compresión inteligente y acabado 100% squat-proof.'}`} 
+    />
+    <meta name="theme-color" content="#ffffff" />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="product" />
+    <meta property="og:title" content={`${product.name} - ${formattedPrice} // Aurea Fit`} />
+    <meta property="og:description" content={`Disponible en tallas: ${sizeEntries.filter(s=>s.available).map(s=>s.size).join(', ')}.`} />
+    <meta property="og:image" content={initialMainImage} />
+  </head>
+
+  <body>
+    <!-- Header Navigation -->
+    <Header />
+
+    <main id="main-content">
+      <!-- Breadcrumb Bar -->
+      <nav class="breadcrumb-container" aria-label="Ruta de navegación">
+        <div class="container">
+          <ol class="breadcrumb-list">
+            <li><a href={baseUrl}>Inicio</a></li>
+            <li class="breadcrumb-sep">/</li>
+            {categorySlug ? (
+              <>
+                <li>
+                  <a href={`${baseUrl}categoria/${encodeURIComponent(categorySlug)}`}>
+                    {categoryName}
+                  </a>
+                </li>
+                <li class="breadcrumb-sep">/</li>
+              </>
+            ) : null}
+            <li class="breadcrumb-current" aria-current="page">{product.name}</li>
+          </ol>
+        </div>
+      </nav>
+
+      <!-- Product Detail Main Section -->
+      <section class="product-detail-section">
+        <div class="container product-detail-layout">
+          
+          <!-- Column 1: Image Gallery -->
+          <div class="product-gallery">
+            <!-- Main Hero Image Viewport -->
+            <div class="main-image-viewport">
+              <img 
+                id="main-product-image" 
+                src={initialMainImage} 
+                alt={product.name} 
+                class="main-image" 
+              />
+              <span class="gallery-tag">100% SQUAT-PROOF</span>
+            </div>
+
+            <!-- Clickable Thumbnails Row -->
+            {galleryImages.length > 1 && (
+              <div class="thumbnails-row">
+                {galleryImages.map((img, idx) => (
+                  <button 
+                    type="button" 
+                    class:list={['thumb-btn', { active: idx === 0 }]}
+                    data-full-img={img.full}
+                    aria-label={`Ver imagen ${idx + 1} de ${product.name}`}
+                  >
+                    <img src={img.thumb} alt={`${product.name} - Vista ${idx + 1}`} class="thumb-img" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <!-- Column 2: Product Info & Actions -->
+          <div class="product-info-panel">
+            
+            <div class="product-header-block">
+              {categorySlug ? (
+                <a href={`${baseUrl}categoria/${encodeURIComponent(categorySlug)}`} class="product-category-link">
+                  {categoryName}
+                </a>
+              ) : (
+                <span class="product-category-link">{categoryName}</span>
+              )}
+              
+              <h1 class="product-page-title">{product.name}</h1>
+              <div class="product-page-price">{formattedPrice}</div>
+            </div>
+
+            <!-- Description -->
+            <div class="product-desc-block">
+              <p>
+                {product.description || 'Prenda deportiva femenina diseñada con tecnología seamless moldeadora. Confeccionada con pretina de compresión alta que no se enrolla, soporte ergonómico y tejido de microfibra elástica 100% libre de transparencias.'}
+              </p>
+            </div>
+
+            <!-- Size Selector -->
+            {sizeEntries.length > 0 && (
+              <div class="size-selector-block">
+                <div class="size-selector-header">
+                  <span class="selector-title">Selecciona tu talla:</span>
+                  <span id="selected-size-display" class="selected-size-label">
+                    Talla elegida: <strong>{defaultSize}</strong>
+                  </span>
+                </div>
+
+                <div class="sizes-pills-grid" role="radiogroup" aria-label="Selector de tallas">
+                  {sizeEntries.map(({ size, stock, available }) => (
+                    <button
+                      type="button"
+                      class:list={[
+                        'size-pill-btn',
+                        { 
+                          'active': size === defaultSize,
+                          'disabled': !available 
+                        }
+                      ]}
+                      data-size={size}
+                      data-stock={stock}
+                      disabled={!available}
+                      role="radio"
+                      aria-checked={size === defaultSize ? 'true' : 'false'}
+                      title={available ? `Talla ${size} disponible (${stock} en stock)` : `Talla ${size} agotada`}
+                    >
+                      <span>{size}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- CTA Actions: WhatsApp Dynamic Order Button -->
+            <div class="product-actions-block">
+              <a 
+                id="wa-order-btn" 
+                href={initialWaUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="btn-order-whatsapp"
+                data-product-name={product.name}
+                data-price={formattedPrice}
+                data-phone={waPhone}
+              >
+                <!-- Official WhatsApp Icon -->
+                <svg class="icon-wa-order" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.182-.077.357.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.679.116-.174.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.203.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.966-1.393A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+                </svg>
+                <span>Ordenar por WhatsApp</span>
+              </a>
+
+              <p class="order-notice">
+                Atención personalizada inmediata • Envíos a todo Costa Rica
+              </p>
+            </div>
+
+            <!-- Value Props List -->
+            <div class="product-perks-list">
+              <div class="perk-row">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>Garantía 100% Squat-Proof sin transparencias</span>
+              </div>
+              <div class="perk-row">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Envío rápido y seguro por Correos de Costa Rica</span>
+              </div>
+              <div class="perk-row">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Asesoría 1:1 con tus medidas antes de despachar</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+
+    <!-- Client-side Interactive Gallery & Dynamic WhatsApp Size Picker -->
+    <script>
+      // 1. Gallery Thumbnail Switcher
+      const mainImg = document.getElementById('main-product-image') as HTMLImageElement | null;
+      const thumbBtns = document.querySelectorAll<HTMLButtonElement>('.thumb-btn');
+
+      thumbBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const fullSrc = btn.getAttribute('data-full-img');
+          if (mainImg && fullSrc) {
+            mainImg.src = fullSrc;
+            thumbBtns.forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+          }
+        });
+      });
+
+      // 2. Size Selector & Dynamic WhatsApp Link Updater
+      const sizeBtns = document.querySelectorAll<HTMLButtonElement>('.size-pill-btn:not(.disabled)');
+      const sizeDisplay = document.getElementById('selected-size-display');
+      const waBtn = document.getElementById('wa-order-btn') as HTMLAnchorElement | null;
+
+      let currentSize = '';
+      const initialActive = document.querySelector<HTMLButtonElement>('.size-pill-btn.active');
+      if (initialActive) {
+        currentSize = initialActive.getAttribute('data-size') || '';
+      }
+
+      function updateWhatsAppLink(size: string) {
+        if (!waBtn) return;
+        const prodName = waBtn.getAttribute('data-product-name') || '';
+        const price = waBtn.getAttribute('data-price') || '';
+        const phone = waBtn.getAttribute('data-phone') || '50688888888';
+
+        const message = `Hola Aurea Fit, deseo ordenar el producto *${prodName}* en talla *${size}* (Precio: ${price}).`;
+        waBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+        if (sizeDisplay) {
+          sizeDisplay.innerHTML = `Talla elegida: <strong>${size}</strong>`;
+        }
+      }
+
+      sizeBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const size = btn.getAttribute('data-size');
+          if (size) {
+            sizeBtns.forEach((b) => {
+              b.classList.remove('active');
+              b.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-checked', 'true');
+            currentSize = size;
+            updateWhatsAppLink(currentSize);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Breadcrumbs */
+  .breadcrumb-container {
+    background-color: var(--bg-cream, #faf8f5);
+    border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
+    padding: 12px 0;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    font-size: 0.84rem;
+    font-family: var(--font-body, sans-serif);
+    color: var(--text-muted, #767682);
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb-list a {
+    color: var(--text-secondary, #4a4a52);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-list a:hover {
+    color: var(--text-primary, #121214);
+  }
+
+  .breadcrumb-sep {
+    color: var(--border-medium, rgba(0, 0, 0, 0.16));
+  }
+
+  .breadcrumb-current {
+    color: var(--text-primary, #121214);
+    font-weight: 700;
+  }
+
+  /* Product Detail Layout */
+  .product-detail-section {
+    padding: 50px 0 90px;
+    background: #ffffff;
+  }
+
+  .product-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  @media (min-width: 992px) {
+    .product-detail-layout {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+  }
+
+  /* Gallery */
+  .product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .main-image-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background-color: var(--bg-sand, #f5f2ec);
+    border-radius: var(--radius-md, 12px);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: opacity 0.3s ease;
+  }
+
+  .gallery-tag {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #121214;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+    border-radius: var(--radius-full, 9999px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .thumbnails-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .thumb-btn {
+    width: 76px;
+    height: 94px;
+    border-radius: var(--radius-sm, 6px);
+    border: 2px solid transparent;
+    padding: 0;
+    background: var(--bg-sand, #f5f2ec);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .thumb-btn:hover {
+    border-color: var(--accent-taupe, #8f7967);
+    transform: translateY(-2px);
+  }
+
+  .thumb-btn.active {
+    border-color: #121214;
+  }
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Info Panel */
+  .product-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .product-header-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
+    padding-bottom: 20px;
+  }
+
+  .product-category-link {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-taupe, #8f7967);
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .product-category-link:hover {
+    text-decoration: underline;
+  }
+
+  .product-page-title {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-primary, #121214);
+    line-height: 1.15;
+  }
+
+  .product-page-price {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary, #121214);
+    letter-spacing: -0.02em;
+  }
+
+  .product-desc-block {
+    font-size: 1rem;
+    color: var(--text-secondary, #4a4a52);
+    line-height: 1.7;
+  }
+
+  /* Size Selector */
+  .size-selector-block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--bg-cream, #faf8f5);
+    padding: 20px;
+    border-radius: var(--radius-md, 12px);
+    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
+  }
+
+  .size-selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+  }
+
+  .selector-title {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary, #121214);
+  }
+
+  .selected-size-label {
+    color: var(--text-secondary, #4a4a52);
+  }
+
+  .selected-size-label strong {
+    color: var(--text-primary, #121214);
+  }
+
+  .sizes-pills-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .size-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: var(--radius-full, 9999px);
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: #ffffff;
+    color: var(--text-primary, #121214);
+    border: 1.5px solid var(--border-medium, rgba(0, 0, 0, 0.16));
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  .size-pill-btn:hover:not(.disabled) {
+    border-color: #121214;
+    background: var(--bg-sand, #f5f2ec);
+    transform: translateY(-2px);
+  }
+
+  .size-pill-btn.active {
+    background: #121214;
+    color: #ffffff;
+    border-color: #121214;
+    box-shadow: 0 4px 14px rgba(18, 18, 20, 0.22);
+  }
+
+  .size-pill-btn.disabled {
+    opacity: 0.35;
+    background: transparent;
+    cursor: not-allowed;
+    text-decoration: line-through;
+    color: var(--text-muted, #767682);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  /* Actions & WhatsApp CTA */
+  .product-actions-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-order-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 18px 36px;
+    border-radius: var(--radius-full, 9999px);
+    background: linear-gradient(135deg, #1b6e3e 0%, #155731 100%);
+    color: #ffffff;
+    font-family: var(--font-body, sans-serif);
+    font-size: 1.02rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(27, 110, 62, 0.35);
+    transition: all 0.25s ease;
+  }
+
+  .btn-order-whatsapp:hover {
+    background: linear-gradient(135deg, #1f7d46 0%, #176137 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(27, 110, 62, 0.45);
+  }
+
+  .btn-order-whatsapp:active {
+    transform: translateY(0);
+  }
+
+  .icon-wa-order {
+    flex-shrink: 0;
+  }
+
+  .order-notice {
+    font-size: 0.84rem;
+    color: var(--text-muted, #767682);
+    text-align: center;
+  }
+
+  /* Perks List */
+  .product-perks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
+  }
+
+  .perk-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.88rem;
+    color: var(--text-secondary, #4a4a52);
+  }
+
+  .perk-row svg {
+    color: var(--accent-taupe, #8f7967);
+    flex-shrink: 0;
+  }
+</style>

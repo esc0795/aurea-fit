@@ -1,0 +1,293 @@
+---
+// src/pages/categoria/[slug].astro
+import Header from '../../components/Header.astro';
+import CategoryFilter from '../../components/CategoryFilter.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Footer from '../../components/Footer.astro';
+import { dataProvider, type Category, type Product } from '../../lib/pocketbase';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  try {
+    const categories = await dataProvider.getCategories();
+
+    return categories.map((cat) => ({
+      params: { slug: cat.slug },
+      props: { category: cat, allCategories: categories },
+    }));
+  } catch (error) {
+    console.error('Error en getStaticPaths para categoria/[slug]:', error);
+    return [];
+  }
+}
+
+interface Props {
+  category: Category;
+  allCategories: Category[];
+}
+
+const { category, allCategories = [] } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+let products: Product[] = [];
+
+if (category?.id) {
+  try {
+    products = await dataProvider.getProducts({
+      categoryId: category.id,
+      onlyActive: true,
+    });
+  } catch (err) {
+    console.error(`Error al consultar productos para la categoría ${category.name}:`, err);
+  }
+}
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{category.name} // Colección Aurea Fit Seamless</title>
+    <meta 
+      name="description" 
+      content={`Descubre la colección de ${category.name} de Aurea Fit. Indumentaria deportiva femenina con efecto moldeador, compresión ergonómica y 100% squat-proof.`} 
+    />
+    <meta name="theme-color" content="#ffffff" />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${category.name} // Aurea Fit`} />
+    <meta property="og:description" content={`Catálogo exclusivo de ${category.name} diseñadas para estilizar y entrenar con confianza.`} />
+  </head>
+
+  <body>
+    <!-- Header Navigation -->
+    <Header />
+
+    <main id="main-content">
+      <!-- Breadcrumb Bar -->
+      <nav class="breadcrumb-container" aria-label="Ruta de navegación">
+        <div class="container">
+          <ol class="breadcrumb-list">
+            <li><a href={baseUrl}>Inicio</a></li>
+            <li class="breadcrumb-sep">/</li>
+            <li><a href={`${baseUrl}#categorias`}>Catálogo</a></li>
+            <li class="breadcrumb-sep">/</li>
+            <li class="breadcrumb-current" aria-current="page">{category.name}</li>
+          </ol>
+        </div>
+      </nav>
+
+      <!-- Category Hero Section -->
+      <section class="category-hero">
+        <div class="container">
+          <div class="category-header">
+            <span class="luxury-tag luxury-tag-gold">COLECCIÓN</span>
+            <h1 class="category-heading">{category.name}</h1>
+            <p class="category-desc">
+              Prendas confeccionadas con microfibra elástica de alto rendimiento, compresión graduada y ajuste libre de transparencias.
+            </p>
+          </div>
+
+          <!-- Reusable Category Navigation Filter (Highlights selected category) -->
+          <CategoryFilter categories={allCategories} activeSlug={category.slug} />
+
+          <!-- Category Products Grid or Friendly Empty State -->
+          {products.length > 0 ? (
+            <div class="category-products-grid">
+              {products.map((product) => (
+                <ProductCard product={product} />
+              ))}
+            </div>
+          ) : (
+            <div class="category-empty-card">
+              <div class="empty-icon-wrapper">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </div>
+              <h3 class="empty-title">Pronto disponible en {category.name}</h3>
+              <p class="empty-text">
+                Actualmente no tenemos prendas activas en esta categoría. Puedes consultar el catálogo completo o escribirnos para reservar tu talla.
+              </p>
+              <div class="empty-actions">
+                <a href={baseUrl} class="btn-empty-return">
+                  <span>Ver todas las colecciones</span>
+                </a>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Breadcrumbs */
+  .breadcrumb-container {
+    background-color: var(--bg-cream, #faf8f5);
+    border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
+    padding: 12px 0;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    font-size: 0.84rem;
+    font-family: var(--font-body, sans-serif);
+    color: var(--text-muted, #767682);
+  }
+
+  .breadcrumb-list a {
+    color: var(--text-secondary, #4a4a52);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-list a:hover {
+    color: var(--text-primary, #121214);
+  }
+
+  .breadcrumb-sep {
+    color: var(--border-medium, rgba(0, 0, 0, 0.16));
+  }
+
+  .breadcrumb-current {
+    color: var(--text-primary, #121214);
+    font-weight: 700;
+  }
+
+  /* Category Hero */
+  .category-hero {
+    padding: 60px 0 100px;
+    background-color: #ffffff;
+  }
+
+  .category-header {
+    text-align: center;
+    max-width: 660px;
+    margin: 0 auto 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .category-heading {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-primary, #121214);
+    line-height: 1.15;
+  }
+
+  .category-desc {
+    font-size: 1rem;
+    color: var(--text-secondary, #4a4a52);
+    line-height: 1.6;
+  }
+
+  /* Grid */
+  .category-products-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 32px;
+  }
+
+  @media (min-width: 640px) {
+    .category-products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .category-products-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+  }
+
+  /* Friendly Empty State */
+  .category-empty-card {
+    text-align: center;
+    padding: 70px 24px;
+    background: var(--bg-sand, #f5f2ec);
+    border-radius: var(--radius-md, 12px);
+    max-width: 580px;
+    margin: 40px auto 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .empty-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-taupe, #8f7967);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  .empty-title {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    color: var(--text-primary, #121214);
+    margin-bottom: 10px;
+  }
+
+  .empty-text {
+    font-size: 0.96rem;
+    color: var(--text-secondary, #4a4a52);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .empty-actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-empty-return {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    border-radius: var(--radius-full, 9999px);
+    background: #121214;
+    color: #ffffff;
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-empty-return:hover {
+    background: var(--accent-taupe, #8f7967);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(143, 121, 103, 0.35);
+  }
+</style>

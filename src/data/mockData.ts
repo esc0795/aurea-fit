@@ -1,0 +1,100 @@
+import type { Category, Product } from '../lib/pocketbase';
+
+export const mockCategories: Category[] = [
+  {
+    collectionId: 'pbc_3292755704',
+    collectionName: 'categories',
+    id: 'jatgikgxag7a1f9',
+    name: 'Leggings',
+    slug: 'Leggings',
+    created: '2026-10-29 00:00:00.000Z',
+    updated: '2026-10-29 00:00:00.000Z',
+  },
+  {
+    collectionId: 'pbc_3292755704',
+    collectionName: 'categories',
+    id: '91w7oij1io464yr',
+    name: 'Bras & crops',
+    slug: 'Bras & crops',
+    created: '2026-10-29 00:00:00.000Z',
+    updated: '2026-10-29 00:00:00.000Z',
+  },
+  {
+    collectionId: 'pbc_3292755704',
+    collectionName: 'categories',
+    id: 'fcmkmmnt1np86u7',
+    name: 'Shorts',
+    slug: 'Shorts',
+    created: '2026-10-29 00:00:00.000Z',
+    updated: '2026-10-29 00:00:00.000Z',
+  },
+];
+
+export const mockProducts: Product[] = [
+  {
+    collectionId: 'pbc_2816619356',
+    collectionName: 'products',
+    id: 'svfo5saxyjc9ysq',
+    name: 'Sports Bra',
+    slug: 'Sports Bra',
+    price: 20000,
+    description: 'Sports bra ergonómico de soporte medio-alto con tejido transpirable, copas extraíbles y detalle distintivo Aurea Fit.',
+    sizes_stock: {
+      S: '20',
+      M: '30',
+      L: '15',
+    },
+    images: ['impact_bra2_6a4h0c8sb7.PNG', 'impact_bra1_544gyd7gbl.PNG'],
+    active: true,
+    category: '91w7oij1io464yr',
+    created: '2026-10-29 00:00:00.000Z',
+    updated: '2026-10-29 00:00:00.000Z',
+    expand: {
+      category: mockCategories[1],
+    },
+  },
+  {
+    collectionId: 'pbc_2816619356',
+    collectionName: 'products',
+    id: 'fp77chxwvrqu4lr',
+    name: 'Impact Flares',
+    slug: 'Impact Flares',
+    price: 25000,
+    description: 'Leggings acampanados con pretina anatómica de alta compresión que estiliza la cintura y tejido 100% squat-proof.',
+    sizes_stock: {
+      S: '17',
+      M: '25',
+      L: '16',
+    },
+    images: ['impact_flares_2_2lwlibej3q.PNG', 'impact_flares_l6nvimsk3j.PNG'],
+    active: true,
+    category: 'jatgikgxag7a1f9',
+    created: '2026-10-29 00:00:00.000Z',
+    updated: '2026-10-29 00:00:00.000Z',
+    expand: {
+      category: mockCategories[0],
+    },
+  },
+  {
+    collectionId: 'pbc_2816619356',
+    collectionName: 'products',
+    id: '7z73ik0rlc8giic',
+    name: 'Impact Shorts',
+    slug: 'Impact Shorts',
+    price: 17000,
+    description: 'Sculpt shorts con efecto booty contour, confección sin costuras molestas y longitud ideal que no se sube al entrenar.',
+    sizes_stock: {
+      S: '25',
+      M: '45',
+      L: '60',
+    },
+    images: ['short2_9k80nhdc44.PNG', 'short1_9jjs8k1rhe.PNG'],
+    active: true,
+    category: 'fcmkmmnt1np86u7',
+    created: '2026-10-29 00:00:00.000Z',
+    updated: '2026-10-29 00:00:00.000Z',
+    expand: {
+      category: mockCategories[2],
+    },
+  },
+];

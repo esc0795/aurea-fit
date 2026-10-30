@@ -1,10 +1,28 @@
 ---
+// src/pages/index.astro
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Benefits from '../components/Benefits.astro';
-import Categories from '../components/Categories.astro';
+import CategoryFilter from '../components/CategoryFilter.astro';
+import ProductCard from '../components/ProductCard.astro';
 import Footer from '../components/Footer.astro';
+import { dataProvider, type Category, type Product } from '../lib/pocketbase';
 import '../styles/global.css';
+
+// Fetch categories and active products via dataProvider (supports both PocketBase and Mock Mode)
+let categories: Category[] = [];
+let products: Product[] = [];
+
+try {
+  const [categoriesData, productsData] = await Promise.all([
+    dataProvider.getCategories(),
+    dataProvider.getProducts({ onlyActive: true }),
+  ]);
+  categories = categoriesData;
+  products = productsData;
+} catch (error) {
+  console.error('Error al consultar datos en index.astro:', error);
+}
 ---
 
 <!doctype html>
@@ -16,10 +34,10 @@ import '../styles/global.css';
     <meta name="generator" content={Astro.generator} />
     
     <!-- SEO Meta Tags for Women's Activewear & Sculpt Seamless -->
-    <title>Aurea Fit // Indumentaria Deportiva Femenina & Seamless Sculpt</title>
+    <title>Aurea Fit // Catálogo Oficial & Seamless Sculpt Activewear</title>
     <meta 
       name="description" 
-      content="Aurea Fitness Wear. Colección exclusiva de ropa deportiva femenina: Seamless contour leggings, sports bras de soporte ergonómico, sculpt shorts y accesorios athleisure (leg warmers y binchas para el cabello). Confección 100% squat-proof y efecto moldeador." 
+      content="Aurea Fitness Wear. Colección exclusiva de ropa deportiva femenina: Seamless contour leggings, sports bras de soporte ergonómico, sculpt shorts y accesorios athleisure. Confección 100% squat-proof y efecto moldeador." 
     />
     <meta name="theme-color" content="#ffffff" />
     
@@ -31,7 +49,7 @@ import '../styles/global.css';
   </head>
   
   <body>
-    <!-- Pure White Header with Prominent Legible Logo -->
+    <!-- Header with Centered Logo, Mobile Hamburger and Cart -->
     <Header />
 
     <!-- Main Content -->
@@ -42,11 +60,148 @@ import '../styles/global.css';
       <!-- Value Props & Female Psychology Benefits Bar -->
       <Benefits />
 
-      <!-- Women's Collections & Categories Grid (Aurea Fit Signature) -->
-      <Categories />
+      <!-- PocketBase Dynamic Live Catalog Section -->
+      <section id="categorias" class="catalog-section">
+        <div class="container">
+          
+          <div class="catalog-header">
+            <span class="luxury-tag luxury-tag-gold">COLECCIÓN ACTIVA</span>
+            <h2 class="catalog-title">
+              EXPLORA NUESTRO <span class="highlight-title">CATÁLOGO</span>
+            </h2>
+            <p class="catalog-subtitle">
+              Prendas deportivas femeninas confeccionadas con compresión inteligente, tejido 100% squat-proof y soporte ergonómico para esculpir tu figura.
+            </p>
+          </div>
+
+          <!-- Navigable Categories Pills (Todos + Categories) -->
+          <CategoryFilter categories={categories} activeSlug="all" />
+
+          <!-- Responsive Products Grid -->
+          {products.length > 0 ? (
+            <div class="products-grid">
+              {products.map((product) => (
+                <ProductCard product={product} />
+              ))}
+            </div>
+          ) : (
+            <div class="catalog-empty-state">
+              <div class="empty-icon-box">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </div>
+              <h3>Pronto agregaremos nuevas prendas</h3>
+              <p>Estamos actualizando el inventario de esta colección. Si buscas una prenda específica, contáctanos directamente.</p>
+            </div>
+          )}
+
+        </div>
+      </section>
     </main>
 
-    <!-- Comprehensive Luxury Footer with WhatsApp Advice & Tech Crew CR Attribution -->
+    <!-- Comprehensive Luxury Footer -->
     <Footer />
   </body>
 </html>
+
+<style>
+  .catalog-section {
+    padding: 80px 0 100px;
+    background-color: var(--bg-white, #ffffff);
+  }
+
+  .catalog-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .catalog-title {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text-primary, #121214);
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+
+  .highlight-title {
+    color: var(--accent-taupe, #8f7967);
+  }
+
+  .catalog-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary, #4a4a52);
+    line-height: 1.6;
+  }
+
+  /* Grid Responsivo de Productos */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 32px;
+  }
+
+  @media (min-width: 640px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+  }
+
+  /* Empty State */
+  .catalog-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--bg-sand, #f5f2ec);
+    border-radius: var(--radius-md, 12px);
+    max-width: 580px;
+    margin: 40px auto 0;
+  }
+
+  .empty-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-taupe, #8f7967);
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  .catalog-empty-state h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: var(--text-primary, #121214);
+  }
+
+  .catalog-empty-state p {
+    font-size: 0.94rem;
+    color: var(--text-muted, #767682);
+    line-height: 1.6;
+  }
+</style>

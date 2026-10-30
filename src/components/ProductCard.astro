@@ -1,0 +1,296 @@
+---
+// src/components/ProductCard.astro
+import type { Product } from '../lib/pocketbase';
+import { getFileUrl } from '../lib/pocketbase';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+const coverImage = product.images?.[0]
+  ? getFileUrl(product.collectionId, product.id, product.images[0], '600x750')
+  : `${baseUrl}images/cat-accessories.jpg`;
+
+const categoryName = product.expand?.category?.name || 'Aurea Activewear';
+
+// Extract sizes and stock status
+const sizeEntries = Object.entries(product.sizes_stock || {}).map(([size, qty]) => {
+  const stockNum = typeof qty === 'number' ? qty : parseInt(String(qty), 10);
+  return {
+    size,
+    stock: isNaN(stockNum) ? 0 : stockNum,
+    available: !isNaN(stockNum) && stockNum > 0
+  };
+});
+
+// Format price in Costa Rican Colones
+const formattedPrice = `₡${Number(product.price || 0).toLocaleString('es-CR')}`;
+const productUrl = `${baseUrl}producto/${encodeURIComponent(product.slug)}`;
+---
+
+<article class="product-card">
+  <!-- Image Container with Scrim & Tag -->
+  <a href={productUrl} class="product-image-link" aria-label={`Ver detalles de ${product.name}`}>
+    <div class="product-image-wrapper">
+      <img 
+        src={coverImage} 
+        alt={product.name} 
+        class="product-image" 
+        loading="lazy" 
+      />
+      <div class="product-image-overlay"></div>
+      
+      <!-- Category Badge -->
+      <span class="product-category-badge">
+        {categoryName}
+      </span>
+    </div>
+  </a>
+
+  <!-- Content Section -->
+  <div class="product-content">
+    <div class="product-header">
+      <span class="product-category-sub">{categoryName}</span>
+      <h3 class="product-title">
+        <a href={productUrl}>{product.name}</a>
+      </h3>
+      <div class="product-price">{formattedPrice}</div>
+    </div>
+
+    <!-- Sizes Stock Badges -->
+    {sizeEntries.length > 0 && (
+      <div class="product-sizes-group">
+        <span class="sizes-label">Tallas:</span>
+        <div class="sizes-badges">
+          {sizeEntries.map(({ size, available }) => (
+            <span 
+              class:list={['size-badge', { 'size-out': !available }]}
+              title={available ? `Talla ${size} disponible` : `Talla ${size} agotada`}
+            >
+              {size}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Action CTA: Modern Rounded Pill Button -->
+    <a href={productUrl} class="btn-product-detail">
+      <span>Ver detalles</span>
+      <svg class="icon-arrow-card" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </div>
+</article>
+
+<style>
+  .product-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
+    border-radius: var(--radius-md, 12px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-champagne, #dfcfbe);
+  }
+
+  /* Image Container */
+  .product-image-link {
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .product-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background-color: var(--bg-sand, #f5f2ec);
+    overflow: hidden;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.06);
+  }
+
+  .product-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15) 100%);
+    pointer-events: none;
+  }
+
+  .product-category-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    color: var(--text-primary, #121214);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: var(--radius-full, 9999px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Content */
+  .product-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+
+  .product-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .product-category-sub {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-taupe, #8f7967);
+  }
+
+  .product-title {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-primary, #121214);
+    margin: 2px 0 6px;
+    line-height: 1.2;
+  }
+
+  .product-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .product-title a:hover {
+    color: var(--accent-taupe, #8f7967);
+  }
+
+  .product-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary, #121214);
+    letter-spacing: -0.02em;
+  }
+
+  /* Sizes Badges */
+  .product-sizes-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .sizes-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted, #767682);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .sizes-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .size-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 8px;
+    border-radius: var(--radius-full, 9999px);
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--bg-sand, #f5f2ec);
+    color: var(--text-primary, #121214);
+    border: 1px solid var(--border-medium, rgba(0, 0, 0, 0.14));
+  }
+
+  .size-badge.size-out {
+    opacity: 0.45;
+    background: transparent;
+    text-decoration: line-through;
+    color: var(--text-muted, #767682);
+  }
+
+  /* Button Action */
+  .btn-product-detail {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: var(--radius-full, 9999px);
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #121214;
+    color: #ffffff;
+    border: 1.5px solid #121214;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-product-detail:hover {
+    background: var(--accent-taupe, #8f7967);
+    border-color: var(--accent-taupe, #8f7967);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(143, 121, 103, 0.35);
+  }
+
+  .icon-arrow-card {
+    transition: transform 0.2s ease;
+  }
+
+  .btn-product-detail:hover .icon-arrow-card {
+    transform: translateX(3px);
+  }
+</style>
