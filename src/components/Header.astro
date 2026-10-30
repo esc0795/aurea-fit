@@ -69,22 +69,7 @@ import FloatingWhatsApp from './FloatingWhatsApp.astro';
         <li><a href="#categorias" class="mobile-nav-item">ACCESORIOS (BINCHAS & LEG WARMERS)</a></li>
         <li><a href="#beneficios" class="mobile-nav-item">TECNOLOGÍA SQUAT-PROOF</a></li>
       </ul>
-      
-      <!-- WhatsApp CTA for Mobile Drawer -->
-      <div class="mobile-drawer-cta-group">
-        <a 
-          href="https://wa.me/50688888888?text=Hola%20Aurea%20Fit,%20deseo%20asesoría%20sobre%20las%20prendas." 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="btn-drawer-whatsapp"
-        >
-          <svg class="icon-whatsapp-brand" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.182-.077.357.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.679.116-.174.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.203.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.966-1.393A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
-          </svg>
-          <span>Asesoría por WhatsApp</span>
-        </a>
-        <p class="drawer-credit">Aurea Fitness Wear • Desarrollado por Tech Crew CR</p>
-      </div>
+      <p class="drawer-credit">Aurea Fitness Wear • Desarrollado por Tech Crew CR</p>
     </div>
   </div>
 </header>
@@ -357,91 +342,66 @@ import FloatingWhatsApp from './FloatingWhatsApp.astro';
     }
   }
 
-  /* Mobile Drawer */
+  /* Mobile Drawer (Compact & Elegant Dropdown) */
   .mobile-drawer {
     display: none;
     background: #ffffff;
     border-top: 1px solid var(--border-light);
-    border-bottom: 2px solid var(--border-medium);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid var(--border-medium);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   }
 
   .mobile-drawer.open {
     display: block;
-    animation: slideDown 0.25s ease forwards;
+    animation: slideDown 0.22s ease forwards;
   }
 
   @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-8px); }
+    from { opacity: 0; transform: translateY(-6px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   .mobile-drawer-inner {
-    padding: 24px 0 32px;
+    padding: 14px 0 16px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
   }
 
   .mobile-nav-links {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 4px;
   }
 
   .mobile-nav-item {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
+    font-family: var(--font-body);
+    font-size: 0.94rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
     color: var(--text-primary);
-    padding: 8px 0;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm, 6px);
     display: block;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    transition: color 0.2s ease, padding-left 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
   }
 
-  .mobile-nav-item:hover {
-    color: var(--accent-taupe);
-    padding-left: 6px;
-  }
-
-  /* Mobile Drawer WhatsApp CTA */
-  .mobile-drawer-cta-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .btn-drawer-whatsapp {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: var(--color-whatsapp, #1b6e3e);
-    color: #ffffff;
-    padding: 15px 28px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    border-radius: var(--radius-full, 9999px);
-    text-decoration: none;
-    box-shadow: 0 4px 14px rgba(27, 110, 62, 0.28);
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .btn-drawer-whatsapp:hover {
-    background: var(--color-whatsapp-hover, #145830);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(27, 110, 62, 0.38);
+  .mobile-nav-item:hover,
+  .mobile-nav-item:active {
+    background-color: var(--bg-sand);
+    color: var(--text-primary);
+    padding-left: 18px;
   }
 
   .drawer-credit {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     text-align: center;
-    margin-top: 8px;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
 </style>
 
